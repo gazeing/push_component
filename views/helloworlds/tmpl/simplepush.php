@@ -14,7 +14,7 @@
 $passphrase = '123456';
 
 // Put your alert message here:
-$message = 'Breaking-news: ';
+$message = 'Breaking news: ';
 
 // $title = 'Foreign scammers target ACT in fraud case';
 // $url = 'http://www.rebonline.com.au/breaking-news/7932-foreign-scammers-target-act-in-fraud-case';
@@ -35,7 +35,7 @@ $fp = stream_socket_client(
 if (!$fp)
 	exit("Failed to connect: $err $errstr" . PHP_EOL);
 
-echo 'Connected to APNS' . PHP_EOL;
+echo 'Connected to APNS <br/>' . PHP_EOL;
 
 // Create the payload body
 $body['aps'] = array(
