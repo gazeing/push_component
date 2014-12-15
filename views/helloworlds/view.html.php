@@ -47,12 +47,12 @@ class HelloWorldViewHelloWorlds extends JViewLegacy
 	 */
 	protected function addToolBar()
 	{
-		JToolBarHelper::title(JText::_('COM_HELLOWORLD_MANAGER_HELLOWORLDS'));
+		JToolBarHelper::title(JText::_('PUSH NOTIFICATION'));
 	// 		JToolBarHelper::deleteList('', 'helloworlds.delete');
 	// 		JToolBarHelper::editList('helloworld.edit');
 	// 		JToolBarHelper::addNew('helloworld.add');
-		JToolbarHelper::publish('helloworld.publish');
-		JToolbarHelper::divider();
-		JToolBarHelper::cancel('helloworld.cancel',  'JTOOLBAR_CLOSE');
+// 		JToolbarHelper::publish('helloworld.publish');
+// 		JToolbarHelper::divider();
+// 		JToolBarHelper::cancel('helloworld.cancel',  'JTOOLBAR_CLOSE');
 	}
 }

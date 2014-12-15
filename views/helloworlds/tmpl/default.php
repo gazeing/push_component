@@ -23,10 +23,14 @@ JHtml::_('behavior.tooltip');
 </form>
 
 <?php 
-$link = $_GET['link']; 
-$name =  $_GET['name'];
-include 'simplepush.php';
-pushOneId('',$name,$link);
+if(!empty($_GET['link']))
+	$link = $_GET['link']; 
+if(!empty($_GET['name'])){
+	$name =  $_GET['name'];
+	include 'simplepush.php';
+	pushOneId('',$name,$link);
+	}
+
 ?>
 
 
