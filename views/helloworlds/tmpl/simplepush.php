@@ -7,6 +7,8 @@
 	
 // 	JFactory::getApplication()->enqueueMessage('push()2');
 // Put your device token here (without spaces):
+
+ 	$tokens = array('b67af00171a9c3097f9f52eb5d82eb067424ee747560a00f553b5bb940e4335b','1b82c6f44dae3066451b509bd4e8ac06c525feec6731a118143dd3967747f325','97782edd1bdf5ace2c6810970c4b83accbd0ea854d95867c0e6e4eae7635cdfb');
  	$deviceToken = 'b67af00171a9c3097f9f52eb5d82eb067424ee747560a00f553b5bb940e4335b';
 //$deviceToken = '1b82c6f44dae3066451b509bd4e8ac06c525feec6731a118143dd3967747f325';
 // $deviceToken = '97782edd1bdf5ace2c6810970c4b83accbd0ea854d95867c0e6e4eae7635cdfb';
@@ -35,7 +37,7 @@ $fp = stream_socket_client(
 if (!$fp)
 	exit("Failed to connect: $err $errstr" . PHP_EOL);
 
-echo 'Connected to APNS <br/>' . PHP_EOL;
+echo 'Connected to APNS <br/> <br/>' . PHP_EOL;
 
 // Create the payload body
 $body['aps'] = array(
@@ -48,16 +50,23 @@ $body['aps'] = array(
 // Encode the payload as JSON
 $payload = json_encode($body);
 
-// Build the binary notification
-$msg = chr(0) . pack('n', 32) . pack('H*', $deviceToken) . pack('n', strlen($payload)) . $payload;
+$count = 0;
+foreach ($tokens as $token){
 
+// Build the binary notification
+$msg = chr(0) . pack('n', 32) . pack('H*', $token) . pack('n', strlen($payload)) . $payload;
+
+
+$count = $count +1;
 // Send it to the server
 $result = fwrite($fp, $msg, strlen($msg));
 
 if (!$result)
-	echo 'Message not delivered' . PHP_EOL;
+	echo 'No.' . $count .' Message not delivered  <br/>' . PHP_EOL;
 else
-	echo 'Message successfully delivered' . PHP_EOL;
+	echo 'No.' . $count . ' Message successfully delivered  <br/>' . PHP_EOL;
+
+}
 
 // Close the connection to the server
 fclose($fp);
