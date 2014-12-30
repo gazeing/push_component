@@ -6,7 +6,19 @@ defined('_JEXEC') or die('Restricted Access');
 JHtml::_('behavior.tooltip');
 ?>
 
+<script type="text/javascript">
+jQuery(document).ready(function(){
+	jQuery("#latest-articles").change(function(){
+		console.log(jQuery(this).val());
+		var title = jQuery(this).val();
+		jQuery("#article-title").val(title);
+		console.log(jQuery(this).find("option:selected").data('link'));
+ 		jQuery("#link").val(jQuery(this).find("option:selected").data('link'));
+	});
+			
+});
 
+</script>
 
 <form action="">
 	<fieldset>
@@ -14,7 +26,7 @@ JHtml::_('behavior.tooltip');
 			value="Search Id" name="search"> <br> <br> -->
 		<legend>Push Article:</legend>
 		Article Name:<br> <input type="hidden" name="option"
-			value="com_helloworld"> <input type="text" name="name" value="" id = "name"> <br>
+			value="com_helloworld"> <input type="text" name="name" value="" id = "article-title"> <br>
 		Link:<br> <input type="text" name="link" value="" id ="link"> <br> <input
 			type="submit" value="Push" name="push">
 	</fieldset>
@@ -51,35 +63,41 @@ $db->setQuery($query, 0, $limit);
 
 //echo $db->getQuery();
 $results = $db->loadObjectList();
-$domain = "http://localhost/";
+$domain = "http://192.168.1.41";
 
 foreach ($results as &$result) {
 	$images = json_decode($result->images);
 	$result->images = (isset($images->image_intro) && $images->image_intro != "") ? $images->image_intro : "images/spi-default-image.jpg";
 	$result->publish_up = strtotime($result->publish_up) . "000";
-	$result->link = $domain. ltrim(JRoute::_(ContentHelperRoute::getArticleRoute($result->id, $result->cat_id)), "/");
+	
+	
+	$app    = JApplication::getInstance('site');
+	$router = $app->getRouter();
+	$url = $router->build(ContentHelperRoute::getArticleRoute($result->id,$result->cat_id));
+	$url = $domain . str_replace('/administrator','',$url->toString());
+	$result->link = $url;
 
 
 }
 
 // Start combo-box
 echo "Latest Articles List:<br>";
-echo "<select name='item' onchange='document.getElementById(\"name\").value =\"" .$results[1]->title ."\";document.getElementById(\"link\").value =\"" .$results[1]->link ."\" '>n";
-echo "<option>-- Select Item --</option>n";
+echo "<select id=\"latest-articles\" name='item'>";
+echo "<option>-- Select Item --</option>";
 
 foreach ($results as &$result) {
-
-	echo "<option value='$result->title'>$result->title</option>n";
-	
+?>
+	<option data-link="<?php echo $result->link; ?>" value="<?php echo $result->title; ?>"><?php echo $result->title; ?></option>
+	<?php
 }
 // return $results;
 
 
 
 // For each item in the results...
-while ( $row = mysql_fetch_array ( $results ) )
-	// Add a new option to the combo-box
-	echo "<option value='$row[item]'>$row[item]</option>n";
+// while ( $row = mysql_fetch_array ( $results ) )
+// 	// Add a new option to the combo-box
+// 	echo "<option value='$row[item]'>$row[item]</option>";
 
 
 
@@ -136,7 +154,9 @@ while ( $row = mysql_fetch_array ( $results ) )
 // 	echo "<input type='submit' value='Submit' /></form>";
 // }
 ?>
-
+</select>
+ <br>
+  <br>
 <?php 
 
 if($_GET){
